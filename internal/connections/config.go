@@ -1,13 +1,13 @@
 package connections
 
 import (
+	"database/sql"
 	"test_task/internal/config"
 	"test_task/internal/connections/postgres"
-	"database/sql"
 )
 
 type Config struct {
-	PostgresSQL	*sql.DB
+	PostgresSQL *sql.DB
 }
 
 func New(cfg *config.Config) (*Config, error) {
@@ -15,7 +15,7 @@ func New(cfg *config.Config) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	return  &Config{
+	return &Config{
 		PostgresSQL: postgresSQL,
 	}, nil
 }

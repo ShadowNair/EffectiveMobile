@@ -1,0 +1,128 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Subscriptions Aggregator API",
+        "description": "REST-сервис для CRUDL операций над подписками и расчета суммарной стоимости за период.",
+        "version": "1.0.0"
+    },
+    "basePath": "/",
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/healthz": {
+        "get": {
+            "summary": "Health check",
+            "responses": {
+            "200": { "description": "OK" }
+            }
+        }
+        },
+        "/api/v1/subscriptions": {
+        "get": {
+            "summary": "List subscriptions",
+            "parameters": [
+            { "name": "user_id", "in": "query", "type": "string", "format": "uuid" },
+            { "name": "service_name", "in": "query", "type": "string" },
+            { "name": "limit", "in": "query", "type": "integer", "default": 50 },
+            { "name": "offset", "in": "query", "type": "integer", "default": 0 }
+            ],
+            "responses": {
+            "200": { "description": "List response" }
+            }
+        },
+        "post": {
+            "summary": "Create subscription",
+            "parameters": [
+            { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/definitions/SubscriptionCreateRequest" } }
+            ],
+            "responses": {
+            "201": { "description": "Created", "schema": { "$ref": "#/definitions/Subscription" } },
+            "400": { "description": "Bad Request", "schema": { "$ref": "#/definitions/Error" } }
+            }
+        }
+        },
+        "/api/v1/subscriptions/{id}": {
+        "get": {
+            "summary": "Get subscription",
+            "parameters": [
+            { "name": "id", "in": "path", "required": true, "type": "string", "format": "uuid" }
+            ],
+            "responses": {
+            "200": { "description": "OK", "schema": { "$ref": "#/definitions/Subscription" } },
+            "404": { "description": "Not Found", "schema": { "$ref": "#/definitions/Error" } }
+            }
+        },
+        "put": {
+            "summary": "Update subscription",
+            "parameters": [
+            { "name": "id", "in": "path", "required": true, "type": "string", "format": "uuid" },
+            { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/definitions/SubscriptionCreateRequest" } }
+            ],
+            "responses": {
+            "200": { "description": "OK", "schema": { "$ref": "#/definitions/Subscription" } },
+            "400": { "description": "Bad Request", "schema": { "$ref": "#/definitions/Error" } },
+            "404": { "description": "Not Found", "schema": { "$ref": "#/definitions/Error" } }
+            }
+        },
+        "delete": {
+            "summary": "Delete subscription",
+            "parameters": [
+            { "name": "id", "in": "path", "required": true, "type": "string", "format": "uuid" }
+            ],
+            "responses": {
+            "204": { "description": "No Content" },
+            "404": { "description": "Not Found", "schema": { "$ref": "#/definitions/Error" } }
+            }
+        }
+        },
+        "/api/v1/subscriptions/summary": {
+        "get": {
+            "summary": "Calculate total subscription cost for period",
+            "parameters": [
+            { "name": "from", "in": "query", "required": true, "type": "string", "example": "07-2025" },
+            { "name": "to", "in": "query", "required": true, "type": "string", "example": "12-2025" },
+            { "name": "user_id", "in": "query", "type": "string", "format": "uuid" },
+            { "name": "service_name", "in": "query", "type": "string" }
+            ],
+            "responses": {
+            "200": { "description": "OK" },
+            "400": { "description": "Bad Request", "schema": { "$ref": "#/definitions/Error" } }
+            }
+        }
+        }
+    },
+    "definitions": {
+        "SubscriptionCreateRequest": {
+        "type": "object",
+        "required": ["service_name", "price", "user_id", "start_date"],
+        "properties": {
+            "service_name": { "type": "string", "example": "Yandex Plus" },
+            "price": { "type": "integer", "example": 400 },
+            "user_id": { "type": "string", "format": "uuid", "example": "60601fee-2bf1-4721-ae6f-7636e79a0cba" },
+
+        "start_date": { "type": "string", "example": "07-2025" },
+        "end_date": { "type": "string", "example": "10-2025" }
+        }
+        },
+        "Subscription": {
+        "type": "object",
+        "properties": {
+            "id": { "type": "string", "format": "uuid" },
+            "service_name": { "type": "string" },
+            "price": { "type": "integer" },
+            "user_id": { "type": "string", "format": "uuid" },
+            "start_date": { "type": "string" },
+            "end_date": { "type": "string" },
+            "created_at": { "type": "string" },
+            "updated_at": { "type": "string" }
+        }
+        },
+        "Error": {
+        "type": "object",
+        "properties": {
+            "error": { "type": "string" }
+        }
+        }
+    }
+}

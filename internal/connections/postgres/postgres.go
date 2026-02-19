@@ -1,9 +1,9 @@
 package postgres
 
 import (
-	"test_task/internal/config"
 	"database/sql"
 	"fmt"
+	"test_task/internal/config"
 	"time"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
