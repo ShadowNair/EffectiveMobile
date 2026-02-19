@@ -1,0 +1,25 @@
+package connections
+
+import (
+	"database/sql"
+	"test_task/internal/config"
+	"test_task/internal/connections/postgres"
+)
+
+type Config struct {
+	PostgresSQL *sql.DB
+}
+
+func New(cfg *config.Config) (*Config, error) {
+	postgresSQL, err := postgres.ConnectDB(cfg.DBConfig)
+	if err != nil {
+		return nil, err
+	}
+	return &Config{
+		PostgresSQL: postgresSQL,
+	}, nil
+}
+
+func (c *Config) CloseAll() {
+	c.PostgresSQL.Close()
+}
