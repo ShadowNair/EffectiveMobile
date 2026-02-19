@@ -1,4 +1,5 @@
 run:
+  version: "2"
   timeout: 3m
   tests: true
   go: '1.25'
