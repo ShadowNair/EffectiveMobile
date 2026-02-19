@@ -37,4 +37,4 @@ jobs:
         with:
           version: v1.61.0
           args: --timeout=5m
-          install-mode: binary
+          install-mode: gomod
