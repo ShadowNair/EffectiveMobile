@@ -15,7 +15,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
+          go-version: "1.23"
           cache: true
 
       - name: Download dependencies
@@ -34,6 +34,6 @@ jobs:
       - name: Golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.61.0 
+          version: v1.64.2 
           args: --timeout=5m
           install-mode: gomod
